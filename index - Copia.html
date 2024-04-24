@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot - Sugestão de Ensino Superior</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .chat-message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .user-message {
+      background-color: #4CAF50;
+      color: white;
+      text-align: right;
+    }
+    .bot-message {
+      background-color: #C6C6C6;
+    }
+    .input-field {
+      width: calc(100% - 70px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .send-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #008CBA;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h1>Chatbot - Sugestão de Ensino Superior</h1>
+    <div id="chat-history" class="chat-container"></div>
+    <div class="input-container">
+      <input type="text" id="user-input" class="input-field" placeholder="Digite sua mensagem...">
+      <button id="send-button" class="send-button">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    const chatbotResponses = {
+      "olá": "Olá! Posso te ajudar a escolher um curso de ensino superior. Me diga um pouco sobre seus interesses, habilidades e objetivos de carreira.",
+      "nome": "Qual o seu nome?",
+      "idade": "Quantos anos você tem?",
+      "interesses": "Quais são seus principais interesses?",
+      "habilidades": "Quais são suas principais habilidades?",
+      "objetivos": "Quais são seus objetivos de carreira?",
+      "curso": "Que tipo de curso você está buscando?",
+      "mercado": "Qual mercado de trabalho você tem interesse?",
+      "universidade": "Qual universidade você tem em mente?",
+      "ajuda": "Posso te ajudar com mais alguma coisa?",
+      "desculpa": "Desculpe, ainda estou em desenvolvimento e não entendi sua pergunta. Tente novamente.",
+      "fim": "Foi um prazer te ajudar! Boa sorte na sua escolha de curso!",
+      "engenharia": "A área de engenharia é muito promissora. Que tipo de engenharia você tem interesse?",
+      "saúde": "O campo da saúde oferece diversas oportunidades. Você tem alguma especialidade médica em mente?",
+      "tecnologia": "A área de tecnologia está sempre em alta. Você tem interesse em desenvolvimento de software, análise de dados ou outra área específica?",
+      "humanas": "As ciências humanas abrangem uma variedade de campos, como psicologia, sociologia e história. Qual dessas áreas desperta mais o seu interesse?",
+      "negócios": "O setor de negócios oferece muitas oportunidades em áreas como administração, finanças e marketing. Qual aspecto dos negócios você gostaria de explorar?",
+      "artes": "As artes são uma forma criativa de expressão. Você tem interesse em música, artes visuais, teatro ou outra forma de arte?",
+      "ambiental": "A área ambiental é fundamental para a sustentabilidade do planeta. Você gostaria de trabalhar com conservação ambiental, energia renovável ou outro aspecto da sustentabilidade?",
+      "jurídico": "O campo jurídico oferece diversas oportunidades em áreas como advocacia, direito empresarial e direito internacional. Qual aspecto do direito você tem interesse?",
+      "educação": "A área da educação é essencial para o desenvolvimento humano. Você tem interesse em se tornar professor, pedagogo ou em outra função na área educacional?",
+      "comunicação": "A comunicação é fundamental em todos os aspectos da vida. Você tem interesse em jornalismo, relações públicas, mídias sociais ou outra área de comunicação?",
+      "ciência": "A ciência abrange uma variedade de disciplinas, desde biologia até física e química. Qual dessas áreas desperta mais o seu interesse?",
+      "carreira": "Que aspecto da sua carreira você gostaria de discutir? Estou aqui para te ajudar a explorar suas opções.",
+      "qualificação": "Você tem alguma qualificação específica que gostaria de discutir em relação à sua carreira?",
+      "tempo": "Quanto tempo você tem disponível para dedicar aos estudos?",
+      "financeiro": "Você tem alguma restrição financeira em relação à sua escolha de curso?",
+      "flexibilidade": "Você prefere um curso presencial ou à distância?",
+      "expectativas": "Quais são as suas expectativas em relação ao seu futuro profissional?",
+      "perfil": "Você gostaria de fazer um teste de perfil profissional para ajudar na sua escolha?",
+      "sucesso": "O que o sucesso significa para você em termos de carreira?",
+      "realização": "Que tipo de realizações você gostaria de alcançar na sua carreira?",
+      "feedback": "Como você se sente em relação às suas habilidades e experiências atuais?",
+    };
+
+    const chatHistory = document.getElementById('chat-history');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+
+    sendButton.addEventListener('click', function() {
+      const message = userInput.value.trim();
+      if (message !== '') {
+        displayUserMessage(message);
+        processUserInput(message);
+        userInput.value = '';
+      }
+    });
+
+    function displayUserMessage(message) {
+      const userMessageElement = document.createElement('div');
+      userMessageElement.classList.add('chat-message', 'user-message');
+      userMessageElement.textContent = message;
+      chatHistory.appendChild(userMessageElement);
+    }
+
+    function displayBotMessage(message) {
+      const botMessageElement = document.createElement('div');
+      botMessageElement.classList.add('chat-message', 'bot-message');
+      botMessageElement.textContent = message;
+      chatHistory.appendChild(botMessageElement);
+    }
+
+    function processUserInput(userInput) {
+      const processedInput = userInput.toLowerCase();
+      const response = determineResponse(processedInput);
+      displayBotMessage(response);
+    }
+
+    function determineResponse(processedInput) {
+      if (chatbotResponses.hasOwnProperty(processedInput)) {
+        return chatbotResponses[processedInput];
+      } else {
+        return chatbotResponses["desculpa"];
+      }
+    }
+  </script>
+</body>
+</html>
+
